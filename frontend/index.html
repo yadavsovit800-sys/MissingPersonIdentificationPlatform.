@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Missing Person Identification</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        header {
+            background: linear-gradient(135deg, #172554, #2563eb);
+            color: white;
+            padding: 24px 40px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 12px 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        nav button {
+            border: none;
+            background: #eef2ff;
+            color: #1e3a8a;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        nav button:hover {
+            background: #dbeafe;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .primary-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .success {
+            margin-top: 20px;
+            padding: 16px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 8px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 16px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 8px;
+        }
+
+        .match {
+            background: white;
+            margin-top: 18px;
+            padding: 22px;
+            border-radius: 12px;
+            border-left: 5px solid #2563eb;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .match h3 {
+            margin-bottom: 12px;
+        }
+
+        .match p {
+            margin: 6px 0;
+        }
+
+        .similarity {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff7ed;
+            color: #9a3412;
+            border-radius: 8px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            overflow-x: auto;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .social-intro {
+            background: linear-gradient(135deg, #eff6ff, #eef2ff);
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .social-intro h3 {
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .social-results {
+            margin-top: 25px;
+        }
+
+        .social-result {
+            background: white;
+            padding: 20px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+        }
+
+        .social-result h3 {
+            margin-bottom: 6px;
+        }
+
+        .social-result p {
+            color: #64748b;
+        }
+
+        .open-btn {
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .open-btn:hover {
+            background: #2563eb;
+        }
+
+        .platform-icon {
+            font-size: 25px;
+            margin-right: 10px;
+        }
+
+        .loading {
+            margin-top: 20px;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 20px;
+            }
+
+            nav {
+                padding: 12px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .social-result {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Missing Person Identification</h1>
+    <p>AI-powered face search and case management system</p>
+</header>
+
+<nav>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('register')">Register Person</button>
+    <button onclick="showSection('identify')">Identify Person</button>
+    <button onclick="showSection('social')">Social Media Search</button>
+    <button onclick="showSection('cases')">Registered Cases</button>
+</nav>
+
+<div class="container">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section active">
+
+        <div class="section-title">
+            <h2>System Dashboard</h2>
+            <p>Manage missing-person registrations and search for possible face matches.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Registered Cases</h3>
+                <div class="number" id="totalCases">0</div>
+            </div>
+
+            <div class="card">
+                <h3>Face Vector Size</h3>
+                <div class="number">512</div>
+            </div>
+
+            <div class="card">
+                <h3>Face Matching</h3>
+                <div class="number">AI</div>
+            </div>
+
+            <div class="card">
+                <h3>Social Search</h3>
+                <div class="number">8+</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REGISTER -->
+    <section id="register" class="section">
+
+        <div class="section-title">
+            <h2>Register Missing Person</h2>
+            <p>Create a case and store the person's face vector.</p>
+        </div>
+
+        <div class="form-card">
+
+            <form id="registerForm">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        id="full_name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input
+                        type="number"
+                        id="age"
+                        min="0"
+                        max="120"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input
+                        type="text"
+                        id="contact_number"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Last Seen Location</label>
+                    <input
+                        type="text"
+                        id="last_seen_location"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Face Image</label>
+                    <input
+                        type="file"
+                        id="register_image"
+                        accept="image/*"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Register Person
+                </button>
+
+            </form>
+
+            <div id="registerResult"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- IDENTIFY -->
+    <section id="identify" class="section">
+
+        <div class="section-title">
+            <h2>Identify Person</h2>
+            <p>Upload a face image to search registered cases.</p>
+        </div>
+
+        <div class="form-card">
+
+            <div class="form-group">
+                <label>Upload Face Image</label>
+
+                <input
+                    type="file"
+                    id="search_image"
+                    accept="image/*"
+                >
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="searchPerson()"
+            >
+                Search Face
+            </button>
+
+            <div id="searchResult"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SOCIAL MEDIA SEARCH -->
+    <section id="social" class="section">
+
+        <div class="section-title">
+            <h2>Social Media Search</h2>
+            <p>Search publicly available web results related to a missing person.</p>
+        </div>
+
+        <div class="social-intro">
+            <h3>🌐 Public Social Media Intelligence</h3>
+            <p>
+                Search public web results across multiple social platforms.
+                Results are potential leads and must be independently verified.
+            </p>
+        </div>
+
+        <div class="form-card">
+
+            <div class="form-group">
+                <label>Person Name</label>
+
+                <input
+                    type="text"
+                    id="social_name"
+                    placeholder="Example: Krishna Yadav"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+
+                <input
+                    type="text"
+                    id="social_location"
+                    placeholder="Example: Nepal"
+                >
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="searchSocialMedia()"
+            >
+                Search Social Media
+            </button>
+
+            <div id="socialLoading"></div>
+
+        </div>
+
+        <div
+            id="socialResults"
+            class="social-results"
+        ></div>
+
+    </section>
+
+
+    <!-- REGISTERED CASES -->
+    <section id="cases" class="section">
+
+        <div class="section-title">
+            <h2>Registered Cases</h2>
+            <p>All missing-person cases currently stored in the system.</p>
+        </div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Contact</th>
+                        <th>Last Seen</th>
+                        <th>Case ID</th>
+                    </tr>
+                </thead>
+
+                <tbody id="casesTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+<footer>
+    Missing Person Identification System
+</footer>
+
+
+<script>
+
+const API = "http://127.0.0.1:8000";
+
+
+function showSection(sectionId) {
+
+    const sections = document.querySelectorAll(".section");
+
+    sections.forEach(section => {
+        section.classList.remove("active");
+    });
+
+    document
+        .getElementById(sectionId)
+        .classList.add("active");
+
+    if (sectionId === "dashboard") {
+        loadDashboard();
+    }
+
+    if (sectionId === "cases") {
+        loadCases();
+    }
+}
+
+
+async function loadDashboard() {
+
+    try {
+
+        const response =
+            await fetch(`${API}/persons`);
+
+        const data =
+            await response.json();
+
+        document.getElementById("totalCases").textContent =
+            data.count;
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+}
+
+
+document
+    .getElementById("registerForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const result =
+            document.getElementById("registerResult");
+
+        result.innerHTML =
+            `<div class="loading">Registering person...</div>`;
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "full_name",
+            document.getElementById("full_name").value
+        );
+
+        formData.append(
+            "age",
+            document.getElementById("age").value
+        );
+
+        formData.append(
+            "contact_number",
+            document.getElementById("contact_number").value
+        );
+
+        formData.append(
+            "last_seen_location",
+            document.getElementById("last_seen_location").value
+        );
+
+        const image =
+            document.getElementById("register_image").files[0];
+
+        formData.append(
+            "image",
+            image
+        );
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/register`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail || "Registration failed"
+                );
+
+            }
+
+            result.innerHTML = `
+                <div class="success">
+
+                    <strong>Registration successful!</strong>
+
+                    <br><br>
+
+                    Case ID:
+                    ${data.case_id}
+
+                    <br>
+
+                    Vector ID:
+                    ${data.vector_id}
+
+                    <br>
+
+                    Face Vector Size:
+                    ${data.vector_size}
+
+                </div>
+            `;
+
+            loadDashboard();
+
+        } catch (error) {
+
+            result.innerHTML = `
+                <div class="error">
+                    ${error.message}
+                </div>
+            `;
+
+        }
+
+    });
+
+
+async function searchPerson() {
+
+    const result =
+        document.getElementById("searchResult");
+
+    const image =
+        document.getElementById("search_image").files[0];
+
+    if (!image) {
+
+        result.innerHTML = `
+            <div class="error">
+                Please select an image.
+            </div>
+        `;
+
+        return;
+    }
+
+    result.innerHTML =
+        `<div class="loading">Searching face...</div>`;
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "image",
+        image
+    );
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/search`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail || "Search failed"
+            );
+
+        }
+
+        if (!data.matches || data.matches.length === 0) {
+
+            result.innerHTML = `
+                <div class="empty">
+                    No possible matches found.
+                </div>
+            `;
+
+            return;
+        }
+
+        let html = "";
+
+        data.matches.forEach(match => {
+
+            const person =
+                match.person;
+
+            const similarity =
+                (match.similarity * 100).toFixed(2);
+
+            html += `
+                <div class="match">
+
+                    <h3>Possible Match</h3>
+
+                    <p>
+                        <strong>Name:</strong>
+                        ${person.full_name}
+                    </p>
+
+                    <p>
+                        <strong>Age:</strong>
+                        ${person.age}
+                    </p>
+
+                    <p>
+                        <strong>Contact:</strong>
+                        ${person.contact_number}
+                    </p>
+
+                    <p>
+                        <strong>Last Seen:</strong>
+                        ${person.last_seen_location}
+                    </p>
+
+                    <p class="similarity">
+                        Similarity:
+                        ${similarity}%
+                    </p>
+
+                    <p>
+                        <strong>Case ID:</strong>
+                        ${person.case_id}
+                    </p>
+
+                </div>
+            `;
+
+        });
+
+        html += `
+            <div class="warning">
+                <strong>Important:</strong>
+                Face matching results are possible leads and
+                should be verified by authorized personnel.
+            </div>
+        `;
+
+        result.innerHTML = html;
+
+    } catch (error) {
+
+        result.innerHTML = `
+            <div class="error">
+                ${error.message}
+            </div>
+        `;
+
+    }
+}
+
+
+async function loadCases() {
+
+    const table =
+        document.getElementById("casesTable");
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5">
+                Loading...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response =
+            await fetch(`${API}/persons`);
+
+        const data =
+            await response.json();
+
+        if (!data.persons || data.persons.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        No registered cases.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        table.innerHTML = "";
+
+        data.persons.forEach(person => {
+
+            const row =
+                document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${person.full_name}</td>
+                <td>${person.age}</td>
+                <td>${person.contact_number}</td>
+                <td>${person.last_seen_location}</td>
+                <td>${person.case_id}</td>
+            `;
+
+            table.appendChild(row);
+
+        });
+
+    } catch (error) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Failed to load cases.
+                </td>
+            </tr>
+        `;
+
+    }
+}
+
+
+async function searchSocialMedia() {
+
+    const name =
+        document
+            .getElementById("social_name")
+            .value
+            .trim();
+
+    const location =
+        document
+            .getElementById("social_location")
+            .value
+            .trim();
+
+    const results =
+        document.getElementById("socialResults");
+
+    const loading =
+        document.getElementById("socialLoading");
+
+    if (!name) {
+
+        results.innerHTML = `
+            <div class="error">
+                Please enter the person's name.
+            </div>
+        `;
+
+        return;
+    }
+
+    loading.innerHTML =
+        `<div class="loading">Searching public results...</div>`;
+
+    results.innerHTML = "";
+
+    try {
+
+        const url =
+            `${API}/social-search?name=${encodeURIComponent(name)}&location=${encodeURIComponent(location)}`;
+
+        const response =
+            await fetch(url);
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail || "Social media search failed"
+            );
+
+        }
+
+        loading.innerHTML = "";
+
+        if (!data.results || data.results.length === 0) {
+
+            results.innerHTML = `
+                <div class="empty">
+                    No public search results were generated.
+                </div>
+            `;
+
+            return;
+        }
+
+        const icons = {
+            "Google": "🔎",
+            "Facebook": "🔵",
+            "Instagram": "📷",
+            "X": "𝕏",
+            "LinkedIn": "💼",
+            "YouTube": "▶️",
+            "TikTok": "🎵",
+            "Reddit": "👽"
+        };
+
+        let html = `
+            <div class="social-intro">
+                <strong>Search completed</strong>
+                <br><br>
+                Query:
+                ${data.query}
+                ${data.location ? " | " + data.location : ""}
+            </div>
+        `;
+
+        data.results.forEach(item => {
+
+            const icon =
+                icons[item.platform] || "🌐";
+
+            html += `
+                <div class="social-result">
+
+                    <div>
+                        <h3>
+                            <span class="platform-icon">
+                                ${icon}
+                            </span>
+                            ${item.platform}
+                        </h3>
+
+                        <p>
+                            ${item.description}
+                        </p>
+                    </div>
+
+                    <a
+                        href="${item.url}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="open-btn"
+                    >
+                        Open Search
+                    </a>
+
+                </div>
+            `;
+
+        });
+
+        html += `
+            <div class="warning">
+                <strong>Important:</strong>
+                These are public web-search results and potential
+                leads only. A search result does not establish
+                that an account belongs to the missing person.
+                Verify information through authorized procedures.
+            </div>
+        `;
+
+        results.innerHTML = html;
+
+    } catch (error) {
+
+        loading.innerHTML = "";
+
+        results.innerHTML = `
+            <div class="error">
+                ${error.message}
+            </div>
+        `;
+
+    }
+}
+
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
